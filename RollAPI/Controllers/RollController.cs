@@ -46,18 +46,18 @@ public class RollController : ControllerBase
     };
     
     [HttpGet]
-    public ActionResult<List<RollDTO>> GetAllRolls()
+    public ActionResult<List<RollResponseDTO>> GetAllRolls()
     {
-        List<RollDTO> rollList = new List<RollDTO>();
+        List<RollResponseDTO> rollList = new List<RollResponseDTO>();
         foreach (Roll r in rolls)
         {
-            rollList.Add(new RollDTO(r));
+            rollList.Add(new RollResponseDTO(r));
         }
         return Ok(rollList);
     }
 
     [HttpGet("{id}")]
-    public ActionResult<RollDTO> GetRoll(int id)
+    public ActionResult<RollResponseDTO> GetRoll(int id)
     {
         var roll = rolls.FirstOrDefault(r => r.Id == id);
         if (roll == null)
@@ -65,7 +65,13 @@ public class RollController : ControllerBase
             throw new HttpRequestException(message: "Not Found", inner: null, statusCode: HttpStatusCode.NotFound);
         }
 
-        return Ok(new RollDTO(roll));
+        return Ok(new RollResponseDTO(roll));
+    }
+    
+    [HttpPost]
+    public ActionResult<RollResponseDTO> PostRoll([FromBody] RollRequestDTO req)
+    {
+        return Ok(new RollResponseDTO(req));
     }
 }
 
