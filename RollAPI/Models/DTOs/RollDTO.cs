@@ -1,73 +1,79 @@
 ﻿using DnDConsole;
 
-namespace RollAPI.DTOs;
+namespace RollAPI.Models.DTOs;
 
-public class RollResponseDTO
+public class RollResponseDto
 {
     public int Id { get; set; }
-    public Dictionary<int, int> diceSet { get; set; }
+    public Dictionary<int, int> DiceSet { get; set; }
     public int RollSum { get; set; }
     
-    public RollResponseDTO() {}
+    public RollResponseDto() {}
     
-    public RollResponseDTO(int id, Dictionary<int, int> set)
+    public RollResponseDto(int id, Dictionary<int, int> set)
     {
         Id = id;
-        diceSet = set;
-        RollSum = getRoll(diceSet);
+        DiceSet = set;
+        RollSum = GetRoll(DiceSet);
     }
 
-    public RollResponseDTO(Roll roll)
+    public RollResponseDto(Roll roll)
     {
         Id = roll.Id;
-        diceSet = roll.diceSet;
-        RollSum = getRoll(roll.diceSet);
+        DiceSet = roll.DiceSet;
+        RollSum = GetRoll(roll.DiceSet);
     }
 
-    public RollResponseDTO(RollRequestDTO req)
+    public RollResponseDto(RollRequestDto req)
     {
         Id = 0;
-        diceSet = req.diceSet;
-        RollSum = getRoll(req.diceSet);
+        DiceSet = req.DiceSet;
+        RollSum = GetRoll(req.DiceSet);
     }
-    
-    public static int getRoll(Dictionary<int, int> diceSet)
+
+    private static int GetRoll(Dictionary<int, int> diceSet)
     {
         int sum = 0;
         
         foreach (KeyValuePair<int, int> dice in diceSet)
         {
-            sum += Random.Shared.Next(minValue: 1, maxValue: dice.Key) * dice.Value;
+			foreach (int i in Enumerable.Range(0, dice.Value)) 
+			{
+                sum += Random.Shared.Next(minValue: 1, maxValue: dice.Key);
+            }
         }
 
         return sum;
     }
 }
 
-public class RollRequestDTO
+public class RollRequestDto
 {
-    public Dictionary<int, int> diceSet { get; set; }
+    public Dictionary<int, int> DiceSet { get; set; }
     
-    public RollRequestDTO() {}
+    public RollRequestDto() {}
     
-    public RollRequestDTO(Dictionary<int, int> set)
+    public RollRequestDto(Dictionary<int, int> set)
     {
-        diceSet = set;
+        DiceSet = set;
     }
 
-    public RollRequestDTO(Roll roll)
+    public RollRequestDto(Roll roll)
     {
-        diceSet = roll.diceSet;
+        DiceSet = roll.DiceSet;
     }
     
     
-    public static int getRoll(Dictionary<int, int> diceSet)
+    public static int GetRoll(Dictionary<int, int> diceSet)
     {
         int sum = 0;
         
         foreach (KeyValuePair<int, int> dice in diceSet)
         {
-            sum += Random.Shared.Next(minValue: 1, maxValue: dice.Key) * dice.Value;
+			foreach (int i in Enumerable.Range(0, dice.Value)) 
+			{
+                sum += Random.Shared.Next(minValue: 1, maxValue: dice.Key);
+            }
         }
 
         return sum;

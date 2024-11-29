@@ -4,7 +4,7 @@ using System.Text;
 using DnDConsole;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using RollAPI.DTOs;
+using RollAPI.Models.DTOs;
 
 namespace RollAPI.Controllers;
 
@@ -12,7 +12,7 @@ namespace RollAPI.Controllers;
 [ApiController]
 public class RollController : ControllerBase
 {
-    private IList<Roll> rolls = new List<Roll>()
+    private IList<Roll> _rolls = new List<Roll>()
     {
         new Roll(1, new Dictionary<int, int>
         {
@@ -46,32 +46,32 @@ public class RollController : ControllerBase
     };
     
     [HttpGet]
-    public ActionResult<List<RollResponseDTO>> GetAllRolls()
+    public ActionResult<List<RollResponseDto>> GetAllRolls()
     {
-        List<RollResponseDTO> rollList = new List<RollResponseDTO>();
-        foreach (Roll r in rolls)
+        List<RollResponseDto> rollList = new List<RollResponseDto>();
+        foreach (Roll r in _rolls)
         {
-            rollList.Add(new RollResponseDTO(r));
+            rollList.Add(new RollResponseDto(r));
         }
         return Ok(rollList);
     }
 
     [HttpGet("{id}")]
-    public ActionResult<RollResponseDTO> GetRoll(int id)
+    public ActionResult<RollResponseDto> GetRoll(int id)
     {
-        var roll = rolls.FirstOrDefault(r => r.Id == id);
+        var roll = _rolls.FirstOrDefault(r => r.Id == id);
         if (roll == null)
         {
             throw new HttpRequestException(message: "Not Found", inner: null, statusCode: HttpStatusCode.NotFound);
         }
 
-        return Ok(new RollResponseDTO(roll));
+        return Ok(new RollResponseDto(roll));
     }
     
     [HttpPost]
-    public ActionResult<RollResponseDTO> PostRoll([FromBody] RollRequestDTO req)
+    public ActionResult<RollResponseDto> PostRoll([FromBody] RollRequestDto req)
     {
-        return Ok(new RollResponseDTO(req));
+        return Ok(new RollResponseDto(req));
     }
 }
 
